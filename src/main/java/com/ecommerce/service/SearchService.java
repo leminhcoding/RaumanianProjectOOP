@@ -1,35 +1,28 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.Product;
-import com.ecommerce.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchService {
-    private final List<Product> products;
+    private List<Product> products;
 
-    public SearchService(ProductRepository repository) {
-        this.products = repository.getAllProducts();
+    public SearchService(List<Product> products) {
+        this.products = products;
     }
 
-    public List<Product> searchProducts(String query) {
-        String[] keywords = query.toLowerCase().split("\\s+");
-        List<Product> results = new ArrayList<>();
+    public List<Product> searchProducts(String keyword) {
+        List<Product> result = new ArrayList<>();
+        keyword = keyword.toLowerCase();
 
-        for (Product product : products) {
-            String combined = (product.getTenSanPham() + " " + product.getMoTaSanPham()).toLowerCase();
-            boolean match = true;
-            for (String keyword : keywords) {
-                if (!combined.contains(keyword)) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
-                results.add(product);
+        for (Product p : products) {
+            if (p.getTenSanPham().toLowerCase().contains(keyword) ||
+                    p.getLoaiSanPham().toLowerCase().contains(keyword) ||
+                    p.getMoTaSanPham().toLowerCase().contains(keyword)) {
+                result.add(p);
             }
         }
-        return results;
+        return result;
     }
 }

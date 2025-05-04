@@ -34,4 +34,7 @@ public class SearchController {
     private String safeDisplay(String value) {
         return (value == null || value.isEmpty()) ? "Đang cập nhật" : value;
     }
+    public List<Product> search(String query) {
+        return searchService.searchProducts(query);
+    }
 }
