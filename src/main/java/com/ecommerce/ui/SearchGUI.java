@@ -118,7 +118,7 @@ public class SearchGUI extends JFrame {
                 textPanel.add(new JLabel("Tên: " + product.getTenSanPham()));
                 textPanel.add(new JLabel("Giá: " + product.getGia()));
                 JButton detailButton = new JButton("Chi tiết");
-                detailButton.addActionListener((ActionEvent e) -> showDetailDialog(product));
+                detailButton.addActionListener((ActionEvent e) -> showProductDetails(product));
                 textPanel.add(detailButton);
 
                 productPanel.add(textPanel, BorderLayout.CENTER);
@@ -132,21 +132,33 @@ public class SearchGUI extends JFrame {
         resultsPanel.repaint();
     }
 
-    private void showDetailDialog(Product product) {
-        JTextArea area = new JTextArea();
-        area.setEditable(false);
-        area.setText(
-                "Tên sản phẩm: " + product.getTenSanPham() + "\n" +
-                        "Giá: " + product.getGia() + "\n" +
-                        "Loại sản phẩm: " + product.getLoaiSanPham() + "\n" +
-                        "Điểm đánh giá trung bình: " + (product.getDiemDanhGiaTrungBinh() != null ? product.getDiemDanhGiaTrungBinh() : "Đang cập nhật") + "\n" +
-                        "Số lượt đánh giá: " + (product.getSoLuotDanhGia() != null ? product.getSoLuotDanhGia() : "Đang cập nhật") + "\n" +
-                        "Mô tả sản phẩm: " + product.getMoTaSanPham() + "\n" +
-                        "Nguồn dữ liệu: " + product.getNguonDuLieu()
-        );
+    private void showProductDetails(Product product) {
+        JTextArea detailArea = new JTextArea();
+        detailArea.setEditable(false);
+        detailArea.setLineWrap(true);
+        detailArea.setWrapStyleWord(true);
 
-        JScrollPane scrollPane = new JScrollPane(area);
-        scrollPane.setPreferredSize(new Dimension(600, 400));
-        JOptionPane.showMessageDialog(this, scrollPane, "Chi tiết sản phẩm", JOptionPane.INFORMATION_MESSAGE);
+        String moTa = product.getMoTaSanPham();
+        if (moTa != null) {
+            moTa = moTa.replaceAll("\\.\\s*", ".\n");
+        } else {
+            moTa = "Đang cập nhật";
+        }
+
+        String details = "Tên sản phẩm: " + product.getTenSanPham() + "\n"
+                + "Giá: " + (product.getGia() != null ? product.getGia() : "Đang cập nhật") + "\n"
+                + "Loại sản phẩm: " + product.getLoaiSanPham() + "\n"
+                + "Điểm đánh giá trung bình: " + (product.getDiemDanhGiaTrungBinh() != null ? product.getDiemDanhGiaTrungBinh() : "Đang cập nhật") + "\n"
+                + "Số lượt đánh giá: " + (product.getSoLuotDanhGia() != null ? product.getSoLuotDanhGia() : "Đang cập nhật") + "\n"
+                + "Nguồn dữ liệu: " + product.getNguonDuLieu() + "\n\n"
+                + "Mô tả sản phẩm:\n" + moTa;
+
+        detailArea.setText(details);
+        detailArea.setCaretPosition(0);
+
+        JScrollPane scrollPane = new JScrollPane(detailArea);
+        scrollPane.setPreferredSize(new Dimension(500, 400));
+
+        JOptionPane.showMessageDialog(null, scrollPane, "Chi tiết sản phẩm", JOptionPane.INFORMATION_MESSAGE);
     }
 }
