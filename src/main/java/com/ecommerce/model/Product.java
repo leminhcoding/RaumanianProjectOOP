@@ -1,7 +1,9 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true) // ✅ Bỏ qua các field không xác định (vd: score)
 public class Product {
     @JsonProperty("Tên sản phẩm")
     private String tenSanPham;
@@ -27,7 +29,10 @@ public class Product {
     @JsonProperty("Ảnh")
     private String anh;
 
-    // Getter & Setter
+    // ✅ Bổ sung nếu muốn sử dụng score để hiển thị kết quả semantic
+    private Double score;
+
+    // Getters & Setters
     public String getTenSanPham() { return tenSanPham; }
     public String getGia() { return gia; }
     public String getLoaiSanPham() { return loaiSanPham; }
@@ -36,4 +41,15 @@ public class Product {
     public String getMoTaSanPham() { return moTaSanPham; }
     public String getNguonDuLieu() { return nguonDuLieu; }
     public String getAnh() { return anh; }
+    public Double getScore() { return score; }
+
+    public void setTenSanPham(String tenSanPham) { this.tenSanPham = tenSanPham; }
+    public void setGia(String gia) { this.gia = gia; }
+    public void setLoaiSanPham(String loaiSanPham) { this.loaiSanPham = loaiSanPham; }
+    public void setDiemDanhGiaTrungBinh(String diemDanhGiaTrungBinh) { this.diemDanhGiaTrungBinh = diemDanhGiaTrungBinh; }
+    public void setSoLuotDanhGia(String soLuotDanhGia) { this.soLuotDanhGia = soLuotDanhGia; }
+    public void setMoTaSanPham(String moTaSanPham) { this.moTaSanPham = moTaSanPham; }
+    public void setNguonDuLieu(String nguonDuLieu) { this.nguonDuLieu = nguonDuLieu; }
+    public void setAnh(String anh) { this.anh = anh; }
+    public void setScore(Double score) { this.score = score; }
 }

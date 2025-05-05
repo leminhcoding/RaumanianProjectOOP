@@ -20,10 +20,11 @@ public class SearchGUI extends JFrame {
     private JButton prevButton, nextButton;
     private JLabel pageLabel;
 
-    private List<Product> allProducts;
     private List<Product> currentResults;
     private int currentPage = 1;
     private final int itemsPerPage = 10;
+
+    private final SearchController searchController;
 
     public SearchGUI() {
         setTitle("Tìm kiếm sản phẩm");
@@ -31,10 +32,10 @@ public class SearchGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Load product list
-        allProducts = FileUtil.loadProductsFromJson();
+        // Khởi tạo controller
+        List<Product> allProducts = FileUtil.loadProductsFromJson();
         SearchService searchService = new SearchService(allProducts);
-        SearchController searchController = new SearchController(searchService);
+        searchController = new SearchController(searchService);
 
         // Top panel
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -43,7 +44,7 @@ public class SearchGUI extends JFrame {
 
         searchButton.addActionListener(e -> {
             String query = searchField.getText().trim();
-            currentResults = searchController.search(query);
+            currentResults = searchController.handleSearchAndReturn(query);
             currentPage = 1;
             displayResults();
         });
@@ -125,7 +126,8 @@ public class SearchGUI extends JFrame {
                 resultsPanel.add(productPanel);
             }
 
-            pageLabel.setText("Trang " + currentPage + " / " + ((currentResults.size() - 1) / itemsPerPage + 1));
+            int totalPages = (currentResults.size() - 1) / itemsPerPage + 1;
+            pageLabel.setText("Trang " + currentPage + " / " + totalPages);
         }
 
         resultsPanel.revalidate();
